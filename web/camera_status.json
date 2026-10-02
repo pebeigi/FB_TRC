@@ -1,0 +1,39 @@
+{
+  "shenkman": {
+    "1": true,
+    "3": true,
+    "2": true
+  },
+  "fulbright": {
+    "1": false,
+    "2": false,
+    "3": false
+  },
+  "jbko": {
+    "2": true,
+    "3": true,
+    "1": false
+  },
+  "himmelfarb": {
+    "1": true,
+    "2": true
+  },
+  "gelman": {
+    "1": true,
+    "2": true,
+    "4": true,
+    "3": true
+  },
+  "duques": {
+    "1": true,
+    "2": true
+  },
+  "police": {
+    "1": true,
+    "2": true
+  },
+  "mfa": {
+    "1": false,
+    "2": false
+  }
+}

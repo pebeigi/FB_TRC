@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Draw coverage</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <aside class="panel">
+    <header>
+      <p class="eyebrow">Coverage</p>
+      <h1>Draw an area</h1>
+      <p class="lede">Draw the coverage with horizontal and vertical sides. Click the first corner to finish it, then drag the shape or slide an edge.</p>
+    </header>
+    <label class="field">Building
+      <select id="site"></select>
+    </label>
+    <fieldset class="field">
+      <legend>Cameras at this building</legend>
+      <div id="camera-checks" class="checks"></div>
+    </fieldset>
+    <label class="field">Coverage for
+      <select id="channel">
+        <option value="">Whole building</option>
+      </select>
+    </label>
+    <button id="place-camera" type="button" class="place-btn">Place selected camera</button>
+    <p id="place-hint" class="note"></p>
+    <p id="point-count" class="note">No points yet.</p>
+    <div class="draw-actions">
+      <button id="undo" type="button">Undo point</button>
+      <button id="clear" type="button">Clear</button>
+      <button id="save" type="button" class="primary">Save</button>
+    </div>
+    <p id="draw-message" class="note"></p>
+    <div id="saved-list" class="site-list"></div>
+    <a class="draw-link" href="/">Back to cameras</a>
+  </aside>
+  <main>
+    <div id="map"></div>
+    <div class="map-tools">
+      <div class="toggle" role="group" aria-label="Map style">
+        <button id="streets-btn" type="button">Map</button>
+        <button id="satellite-btn" type="button" class="active">Satellite</button>
+      </div>
+    </div>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/draw.js"></script>
+</body>
+</html>

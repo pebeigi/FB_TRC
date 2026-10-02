@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus cameras</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <aside class="panel">
+    <header>
+      <p class="eyebrow">Foggy Bottom</p>
+      <h1>Campus cameras</h1>
+      <p class="lede">Click a building to zoom in. Click a camera to open its stream.</p>
+    </header>
+    <section id="access-message" class="access-message">
+      <span>If you are not on the GW Local Network or using the GW VPN, camera status and live streams might not work.</span>
+      <button id="access-message-close" type="button" aria-label="Dismiss warning">×</button>
+    </section>
+    <form id="access-form" class="access-form">
+      <label for="camera-password">GW camera password</label>
+      <div class="access-form-row">
+        <input id="camera-password" name="password" type="password" autocomplete="current-password" required>
+        <button type="submit">Unlock</button>
+      </div>
+      <p id="access-error" class="access-error" hidden></p>
+    </form>
+    <button id="refresh-btn" type="button" class="refresh-btn">Refresh cameras</button>
+    <div id="site-list" class="site-list"></div>
+    <a class="draw-link" href="/draw.html">Draw coverage</a>
+    <p class="note">The map stays dim outside camera coverage. Each building has its own color, and overlapping areas stay visible. Draw the real outlines on the coverage page.</p>
+  </aside>
+
+  <main>
+    <div id="map"></div>
+    <div class="map-tools">
+      <button id="back-btn" type="button">All buildings</button>
+      <button id="all-cameras-btn" type="button">All cameras</button>
+      <div class="toggle" role="group" aria-label="Map style">
+        <button id="streets-btn" type="button" class="active">Map</button>
+        <button id="satellite-btn" type="button">Satellite</button>
+      </div>
+    </div>
+  </main>
+
+  <section id="stream-panel" class="stream" hidden>
+    <header>
+      <div>
+        <p id="stream-site" class="eyebrow"></p>
+        <h2 id="stream-title"></h2>
+      </div>
+      <button id="stream-close" type="button" aria-label="Close stream">Close</button>
+    </header>
+    <div class="viewer">
+      <img id="stream-image" alt="Live camera view">
+      <p id="stream-status" class="status">Connecting…</p>
+    </div>
+  </section>
+
+  <section id="camera-wall" class="wall" hidden>
+    <header>
+      <div>
+        <p id="wall-status" class="eyebrow">0 out of 0 LIVE</p>
+        <h2>All cameras</h2>
+      </div>
+      <button id="wall-close" type="button">Close</button>
+    </header>
+    <div id="wall-grid" class="wall-grid"></div>
+  </section>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/map.js"></script>
+</body>
+</html>
