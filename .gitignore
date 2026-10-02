@@ -1,0 +1,8 @@
+# Downloaded model weights and generated analysis artifacts
+*.pt
+recordings/
+runs/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
