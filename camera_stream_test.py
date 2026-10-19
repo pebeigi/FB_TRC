@@ -1,3 +1,7 @@
+#nuCross: An Interaction-Rich Multimodal Dataset for Autonomous Driving
+#nuCity: A Dataset of Heterogeneous Road-User Interactions for Autonomous Driving
+#A Multi-Intersection Dataset for Interaction-Rich Autonomous Driving
+
 import os
 import getpass
 import cv2

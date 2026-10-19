@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "reference": {
+    "name": "Map.tif",
+    "width": 21121,
+    "height": 25601,
+    "bands": 3,
+    "crs": "EPSG:3857",
+    "transform": [
+      0.018661383858683333,
+      0.0,
+      -8577231.250116592,
+      0.0,
+      -0.01866138385865842,
+      4707536.731651458
+    ],
+    "preview_url": "/homography/reference.jpg?v=1792179063",
+    "tile_url_template": "/homography/reference-tile/{z}/{x}/{y}.jpg?v=1792179063",
+    "tile_size": 512,
+    "tile_min_zoom": 5,
+    "tile_max_zoom": 6,
+    "tile_activation_scale": 0.22
+  },
+  "cameras": {},
+  "point_sets": {
+    "shenkman-1": {
+      "camera_id": "shenkman-1",
+      "source_image": "shenkman_ch1.jpg",
+      "source_width": 3840,
+      "source_height": 2160,
+      "points": [
+        {
+          "camera": [
+            1500.389,
+            1356.041
+          ],
+          "map": [
+            2853.489,
+            18702.666
+          ]
+        }
+      ],
+      "revision": 1792179712101,
+      "updated_at": "2026-10-16T19:42:00.677246+00:00"
+    }
+  }
+}

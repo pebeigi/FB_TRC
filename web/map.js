@@ -37,6 +37,7 @@ const streamStatus = document.getElementById("stream-status");
 const accessMessage = document.getElementById("access-message");
 const accessForm = document.getElementById("access-form");
 const accessError = document.getElementById("access-error");
+const accessStatus = document.getElementById("access-status");
 const refreshButton = document.getElementById("refresh-btn");
 let warningDismissed = false;
 
@@ -217,6 +218,7 @@ document.getElementById("refresh-btn").addEventListener("click", async () => {
 function showAccessMessage() {
   if (!warningDismissed) accessMessage.hidden = false;
   accessForm.hidden = access.unlocked;
+  accessStatus.hidden = !access.unlocked;
 }
 
 function applyAccess(nextAccess) {

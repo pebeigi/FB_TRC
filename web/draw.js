@@ -289,7 +289,10 @@ function syncCameraControls() {
   const previous = channelSelect.value;
   cameraChecks.innerHTML = "";
   channelSelect.innerHTML = '<option value="">Whole building</option>';
-  for (let channel = 1; channel <= 4; channel += 1) {
+  const availableChannels = site.cameras
+    .map((camera) => camera.channel)
+    .sort((a, b) => a - b);
+  for (const channel of availableChannels) {
     const label = document.createElement("label");
     label.className = "check";
     const input = document.createElement("input");

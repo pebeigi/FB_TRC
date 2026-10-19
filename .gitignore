@@ -3,6 +3,18 @@
 recordings/
 runs/
 
+# Large local reference imagery and camera captures
+*.tif
+*.tiff
+camera_frames/
+calibration_frames/
+homography_frames/
+web/generated/
+
 # Python bytecode
 __pycache__/
 *.py[cod]
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db

@@ -374,6 +374,7 @@ main { position: absolute; inset: 0; }
 .access-form input { min-width: 0; flex: 1; }
 .access-form button { padding: 8px 12px; background: var(--ink); color: white; }
 .access-error { margin: 7px 0 0; color: #a33636; font-size: 12px; }
+.access-status { margin: 14px 0; color: #23745c; font-size: 13px; font-weight: 700; }
 
 .leaflet-div-icon.building-label-wrap {
   background: transparent;

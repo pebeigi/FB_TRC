@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Camera homography calibration</title>
+  <link rel="stylesheet" href="/homography.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <a href="/" class="back-link">← Campus map</a>
+      <div>
+        <p class="eyebrow">Ground-plane registration</p>
+        <h1>Camera homography</h1>
+      </div>
+    </div>
+
+    <div class="camera-picker">
+      <label for="camera-select">Camera</label>
+      <select id="camera-select"></select>
+      <span id="frame-mode-badge" class="badge mode-badge"></span>
+      <span id="saved-badge" class="badge" hidden>Saved</span>
+      <button id="capture-btn" type="button" class="secondary">Capture live frame</button>
+    </div>
+  </header>
+
+  <section class="instructions">
+    <strong>Select the same ground point in both images.</strong>
+    Click the camera frame first, then the reference map. Use wheel/trackpad to zoom and drag to pan.
+    Full-resolution TIFF detail loads automatically as you zoom into the map.
+    Use sidewalk corners, painted road markings, or building corners where they meet the ground—avoid rooftops, trees, and points above ground. Four pairs is the minimum; 8–12 well-spread pairs is better.
+  </section>
+
+  <main class="workspace">
+    <section class="viewer-panel">
+      <header class="viewer-header">
+        <div>
+          <p class="step">Step 1</p>
+          <h2>Camera frame</h2>
+        </div>
+        <div class="viewer-tools">
+          <span id="camera-coordinates">x —, y —</span>
+          <button type="button" data-view="camera" data-action="out" aria-label="Zoom camera out">−</button>
+          <button type="button" data-view="camera" data-action="in" aria-label="Zoom camera in">+</button>
+          <button type="button" data-view="camera" data-action="fit">Fit</button>
+        </div>
+      </header>
+      <div class="canvas-wrap">
+        <canvas id="camera-canvas"></canvas>
+        <div id="camera-empty" class="empty-state" hidden>
+          <strong>No saved frame</strong>
+          <span>Unlock camera access on the campus map, then use “Capture live frame”.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="viewer-panel">
+      <header class="viewer-header">
+        <div>
+          <p class="step">Step 2</p>
+          <h2 id="reference-name">Map.tif</h2>
+        </div>
+        <div class="viewer-tools">
+          <span id="map-coordinates">x —, y —</span>
+          <button type="button" data-view="map" data-action="out" aria-label="Zoom map out">−</button>
+          <button type="button" data-view="map" data-action="in" aria-label="Zoom map in">+</button>
+          <button type="button" data-view="map" data-action="fit">Fit</button>
+        </div>
+      </header>
+      <div class="canvas-wrap">
+        <canvas id="map-canvas"></canvas>
+        <div id="map-loading" class="loading-state">Preparing the large TIFF preview…</div>
+      </div>
+    </section>
+
+    <aside class="points-panel">
+      <header>
+        <div>
+          <p class="eyebrow">Correspondences</p>
+          <h2><span id="point-count">0</span> point pairs</h2>
+        </div>
+        <button id="undo-btn" type="button" class="icon-btn" disabled>Undo</button>
+      </header>
+
+      <div id="pair-prompt" class="pair-prompt">Select a point in the camera frame.</div>
+
+      <div class="point-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Camera x, y</th>
+              <th>Map x, y</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="point-table"></tbody>
+        </table>
+      </div>
+
+      <div class="quality-card">
+        <div><span>Inliers</span><strong id="inlier-value">—</strong></div>
+        <div><span>Map RMSE</span><strong id="rmse-value">—</strong></div>
+        <div><span>Max error</span><strong id="max-error-value">—</strong></div>
+      </div>
+
+      <details class="matrix-card">
+        <summary>Homography matrix</summary>
+        <pre id="matrix-value">Not computed</pre>
+      </details>
+
+      <p id="status-message" class="status-message" aria-live="polite"></p>
+
+      <div class="actions">
+        <button id="save-btn" type="button" class="primary" disabled>Compute &amp; save</button>
+        <button id="clear-btn" type="button" class="secondary" disabled>Clear points</button>
+        <button id="delete-btn" type="button" class="danger" hidden>Delete saved calibration</button>
+      </div>
+    </aside>
+  </main>
+
+  <script src="/homography.js?v=3"></script>
+</body>
+</html>
