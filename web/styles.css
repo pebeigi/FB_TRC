@@ -425,6 +425,37 @@ main { position: absolute; inset: 0; }
 .building-pin span, .camera-pin span { transform: rotate(45deg); }
 .building-pin.offline, .camera-pin.offline { background: #8d6a32; }
 
+.camera-location-icon {
+  background: transparent;
+  border: 0;
+}
+
+.camera-location-pin {
+  align-items: center;
+  background: var(--camera-color);
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(23, 32, 51, 0.42);
+  color: #fff;
+  cursor: grab;
+  display: flex;
+  font-size: 12px;
+  font-weight: 800;
+  height: 30px;
+  justify-content: center;
+  width: 30px;
+}
+
+.camera-location-pin.unplaced {
+  background: #fff;
+  border-color: var(--camera-color);
+  color: var(--camera-color);
+}
+
+.leaflet-dragging .camera-location-pin {
+  cursor: grabbing;
+}
+
 @media (max-width: 800px) {
   .panel { max-height: 42vh; }
   .map-tools { left: 16px; top: auto; bottom: 16px; }

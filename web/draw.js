@@ -244,42 +244,80 @@ function currentSite() {
   return sites.find((item) => item.id === siteSelect.value);
 }
 
+function cameraLocationIcon(site, camera) {
+  return L.divIcon({
+    className: "camera-location-icon",
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    html: `<span class="camera-location-pin${camera.placed ? "" : " unplaced"}" style="--camera-color:${site.color}">${camera.channel}</span>`,
+  });
+}
+
+function camerasWithLocation(site, channel, latlng) {
+  return site.cameras.map((camera) => ({
+    channel: camera.channel,
+    lat: camera.channel === channel ? latlng.lat : (camera.placed ? camera.lat : null),
+    lng: camera.channel === channel ? latlng.lng : (camera.placed ? camera.lng : null),
+  }));
+}
+
 function renderPins() {
   pinLayer.clearLayers();
   const site = currentSite();
   if (!site) return;
   site.cameras.forEach((camera) => {
-    L.circleMarker([camera.lat, camera.lng], {
-      radius: 8,
-      color: site.color,
-      weight: 2,
-      fillColor: camera.placed ? site.color : "#ffffff",
-      fillOpacity: 1,
-    })
-      .bindTooltip(
-        camera.placed
-          ? `${site.name} camera ${camera.channel}`
-          : `Camera ${camera.channel} is not placed yet`,
-        { direction: "top" }
-      )
-      .addTo(pinLayer);
+    const marker = L.marker([camera.lat, camera.lng], {
+      draggable: true,
+      icon: cameraLocationIcon(site, camera),
+      keyboard: true,
+      title: `Drag ${site.name} camera ${camera.channel}`,
+    });
+    marker.bindTooltip(
+      camera.placed
+        ? `${site.name} camera ${camera.channel} · drag to move`
+        : `Camera ${camera.channel} is not placed yet · drag to place`,
+      { direction: "top" }
+    );
+    marker.on("dragstart", () => {
+      placing = null;
+      marker.closeTooltip();
+      setMessage(`Moving camera ${camera.channel}…`);
+    });
+    marker.on("dragend", async () => {
+      marker.dragging.disable();
+      const saved = await persistCameras(
+        camerasWithLocation(site, camera.channel, marker.getLatLng())
+      );
+      if (!saved) {
+        marker.setLatLng([camera.lat, camera.lng]);
+        marker.dragging.enable();
+        return;
+      }
+      setMessage(`Saved the location of camera ${camera.channel}.`);
+    });
+    marker.addTo(pinLayer);
   });
 }
 
 async function persistCameras(cameras) {
-  const response = await fetch("/api/cameras", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ site: siteSelect.value, cameras }),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    setMessage(data.error || "Could not save cameras.");
+  try {
+    const response = await fetch("/api/cameras", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ site: siteSelect.value, cameras }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      setMessage(data.error || "Could not save cameras.");
+      return false;
+    }
+    sites = data.sites;
+    syncCameraControls();
+    return true;
+  } catch (error) {
+    setMessage("Could not save cameras. Check that the server is running.");
     return false;
   }
-  sites = data.sites;
-  syncCameraControls();
-  return true;
 }
 
 function syncCameraControls() {
@@ -359,11 +397,7 @@ map.on("click", async (event) => {
   if (placing) {
     const site = currentSite();
     const placedChannel = placing;
-    const cameras = site.cameras.map((camera) => ({
-      channel: camera.channel,
-      lat: camera.channel === placedChannel ? event.latlng.lat : (camera.placed ? camera.lat : null),
-      lng: camera.channel === placedChannel ? event.latlng.lng : (camera.placed ? camera.lng : null),
-    }));
+    const cameras = camerasWithLocation(site, placedChannel, event.latlng);
     placing = null;
     const saved = await persistCameras(cameras);
     if (saved) setMessage(`Saved the location of camera ${placedChannel}.`);

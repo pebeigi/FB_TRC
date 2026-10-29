@@ -10,6 +10,8 @@ camera_frames/
 calibration_frames/
 homography_frames/
 web/generated/
+web/trajectory_map.html
+web/trajectory_map.js
 
 # Python bytecode
 __pycache__/

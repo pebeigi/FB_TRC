@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Draw coverage</title>
+  <title>Camera locations and coverage</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <aside class="panel">
     <header>
-      <p class="eyebrow">Coverage</p>
-      <h1>Draw an area</h1>
-      <p class="lede">Draw the coverage with horizontal and vertical sides. Click the first corner to finish it, then drag the shape or slide an edge.</p>
+      <p class="eyebrow">Map editor</p>
+      <h1>Camera locations and coverage</h1>
+      <p class="lede">Drag a numbered camera pin to change its location. Draw coverage with horizontal and vertical sides, then drag the shape or slide an edge.</p>
     </header>
     <label class="field">Building
       <select id="site"></select>
@@ -26,7 +26,7 @@
         <option value="">Whole building</option>
       </select>
     </label>
-    <button id="place-camera" type="button" class="place-btn">Place selected camera</button>
+    <button id="place-camera" type="button" class="place-btn">Place selected camera by clicking</button>
     <p id="place-hint" class="note"></p>
     <p id="point-count" class="note">No points yet.</p>
     <div class="draw-actions">

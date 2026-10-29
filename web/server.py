@@ -5,6 +5,7 @@ import json
 import math
 import os
 import re
+import tempfile
 import threading
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -200,6 +201,7 @@ next_stream_id = {"value": 0}
 reference_preview_lock = threading.Lock()
 reference_tile_lock = threading.Lock()
 homography_file_lock = threading.RLock()
+layout_file_lock = threading.RLock()
 
 
 def load_status():
@@ -249,18 +251,32 @@ def refresh_cameras():
 
 
 def load_layout():
-    if not os.path.isfile(LAYOUT_PATH):
-        return {"sites": {}}
-    with open(LAYOUT_PATH, encoding="utf-8") as handle:
-        data = json.load(handle)
-    data.setdefault("sites", {})
-    return data
+    with layout_file_lock:
+        if not os.path.isfile(LAYOUT_PATH):
+            return {"sites": {}}
+        with open(LAYOUT_PATH, encoding="utf-8") as handle:
+            data = json.load(handle)
+        data.setdefault("sites", {})
+        return data
 
 
 def write_layout(data):
-    with open(LAYOUT_PATH, "w", encoding="utf-8") as handle:
-        json.dump(data, handle, indent=2)
-        handle.write("\n")
+    with layout_file_lock:
+        directory = os.path.dirname(LAYOUT_PATH)
+        descriptor, temporary_path = tempfile.mkstemp(
+            prefix=".cameras.", suffix=".tmp", dir=directory, text=True
+        )
+        try:
+            with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as handle:
+                json.dump(data, handle, indent=2)
+                handle.write("\n")
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temporary_path, LAYOUT_PATH)
+        except Exception:
+            if os.path.exists(temporary_path):
+                os.unlink(temporary_path)
+            raise
 
 
 def site_cameras(site):
@@ -355,9 +371,10 @@ def save_site_cameras(payload):
             raise ValueError("Camera coordinate is outside the map")
         clean.append({"channel": channel, "lat": lat, "lng": lng})
     clean.sort(key=lambda cam: cam["channel"])
-    data = load_layout()
-    data["sites"][site_id] = {"cameras": clean}
-    write_layout(data)
+    with layout_file_lock:
+        data = load_layout()
+        data["sites"][site_id] = {"cameras": clean}
+        write_layout(data)
     return {"sites": public_sites()}
 
 
